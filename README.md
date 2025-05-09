@@ -1,4 +1,6 @@
 **Rezept-Manager**
+
+
 *Ziel:*
 Die Nutzer sollen über eine graphische Oberfläche Kochrezepte aus einer DB (quasi das eigene Kochbuch) Rezepte suchen und öffnen können. Um aber Rezepte in die Datenbank zu bekommen kann man auch über eine API der spoonacular.com neue Rezepte suchen, die man dann favorisieren (in die DB speichern) kann. Des Weiteren soll man dann zu den gespeicherten Rezepten Notizen aufschreiben. Diese können aber auch wieder gelöscht werden, genauso wie die Favorisierten.
 
