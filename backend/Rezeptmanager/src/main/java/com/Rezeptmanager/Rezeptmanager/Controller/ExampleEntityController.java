@@ -1,7 +1,7 @@
-package com.example.controller;
+package com.Rezeptmanager.Rezeptmanager.Controller;
 
-import com.example.model.ExampleEntity;
-import com.example.service.ExampleEntityService;
+import com.Rezeptmanager.Rezeptmanager.Model.ExampleEntity;
+import com.Rezeptmanager.Rezeptmanager.Service.ExampleEntityService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

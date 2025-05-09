@@ -1,4 +1,4 @@
-package com.example.model;
+package com.Rezeptmanager.Rezeptmanager.Model;
 
 import jakarta.persistence.*;
 

@@ -1,7 +1,7 @@
-package com.example.service;
+package com.Rezeptmanager.Rezeptmanager.Service;
 
-import com.example.model.ExampleEntity;
-import com.example.repository.ExampleEntityRepository;
+import com.Rezeptmanager.Rezeptmanager.Model.ExampleEntity;
+import com.Rezeptmanager.Rezeptmanager.Repository.ExampleEntityRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
