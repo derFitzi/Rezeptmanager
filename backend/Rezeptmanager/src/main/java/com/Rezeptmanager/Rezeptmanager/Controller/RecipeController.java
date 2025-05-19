@@ -2,34 +2,55 @@ package com.Rezeptmanager.Rezeptmanager.Controller;
 
 import com.Rezeptmanager.Rezeptmanager.Model.Recipe;
 import com.Rezeptmanager.Rezeptmanager.Service.RecipeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/recipes")
+@RequestMapping("/api/recipes")
 public class RecipeController {
 
     private final RecipeService recipeService;
 
+    @Autowired
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
 
-    @GetMapping
-    public List<Recipe> getAllRecipes() {
-        return recipeService.getAllRecipes();
-    }
-
-    @PostMapping
+    @PostMapping("/save")
     public Recipe saveRecipe(@RequestBody Recipe recipe) {
+        System.out.println("Empfangene API ID: " + recipe.getApiId());
         return recipeService.saveRecipe(recipe);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
-        recipeService.deleteRecipe(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/search")
+    public ResponseEntity<List<Recipe>> searchRecipes(@RequestParam(required = false) String query) {
+        List<Recipe> recipes;
+        if (query == null || query.isEmpty()) {
+            recipes = recipeService.getAllRecipes();
+        } else {
+            recipes = recipeService.searchRecipes(query);
+        }
+        return ResponseEntity.ok(recipes);
+    }
+
+    @DeleteMapping("/delete/{apiId}")
+    public ResponseEntity<String> deleteRecipe(@PathVariable Long apiId) {
+        try {
+            Optional<Recipe> recipe = recipeService.findRecipeByApiId(apiId);
+            if (recipe.isPresent()) {
+                recipeService.deleteRecipeByApiId(apiId);
+                return ResponseEntity.ok("Rezept wurde gelöscht.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rezept wurde nicht gespeichert.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fehler beim Löschen des Rezepts.");
+        }
     }
 }
