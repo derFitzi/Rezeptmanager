@@ -5,7 +5,6 @@
         :value="searchQuery"
         @input="$emit('update:searchQuery', $event.target.value)"
     />
-
     <button @click="onSearch">Suchen</button>
   </div>
 </template>
@@ -15,7 +14,7 @@ export default {
   props: ["searchQuery"],
   methods: {
     onSearch() {
-      this.$emit("search", this.searchQuery);
+      this.$emit("search", this.searchQuery); // Übergibt den aktuellen Wert
     },
   },
 };

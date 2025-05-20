@@ -1,8 +1,6 @@
 package com.Rezeptmanager.Rezeptmanager.Model;
 
-
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class Note {
@@ -11,19 +9,14 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String content;
+
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    private String text;
-
-    private LocalDate createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDate.now();
-    }
-
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -32,27 +25,19 @@ public class Note {
         this.id = id;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public Recipe getRecipe() {
         return recipe;
     }
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
     }
 }

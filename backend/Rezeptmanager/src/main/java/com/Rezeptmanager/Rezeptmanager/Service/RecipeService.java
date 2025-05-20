@@ -38,8 +38,7 @@ public class RecipeService {
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
-
     public List<Recipe> searchRecipes(String query) {
         return recipeRepository.findByTitleContainingIgnoreCase(query);
     }
-}
+ }

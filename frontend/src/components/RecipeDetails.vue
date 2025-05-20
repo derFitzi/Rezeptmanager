@@ -1,19 +1,19 @@
 <template>
-  <div v-if="recipe" class="recipe-details">
-    <h1>{{ recipe.title }}</h1>
+  <div v-if="recipeDetails" class="recipe-details">
+    <h1>{{ recipeDetails.title }}</h1>
     <button @click="saveToCookbook">Im Kochbuch Speichern</button>
     <button @click="deleteFromCookbook">Rezept löschen</button>
-    <p><strong>Quelle:</strong> <a :href="recipe.sourceUrl" target="_blank">{{ recipe.sourceName }}</a></p>
-    <img :src="recipe.image" :alt="recipe.title" class="recipe-image" />
+    <p><strong>Quelle:</strong> <a :href="recipeDetails.sourceUrl" target="_blank">{{ recipeDetails.sourceName }}</a></p>
+    <img :src="recipeDetails.image" :alt="recipeDetails.title" class="recipe-image" />
     <h2>Zutaten</h2>
     <ul>
-      <li v-for="ingredient in recipe.ingredients" :key="ingredient.id">
+      <li v-for="ingredient in recipeDetails.ingredients" :key="ingredient.id">
         {{ ingredient.name }} - {{ ingredient.amount }} {{ ingredient.unit }}
       </li>
     </ul>
     <h2>Zubereitung</h2>
     <ol>
-      <li v-for="(step, index) in recipe.instructions" :key="index">
+      <li v-for="(step, index) in recipeDetails.instructions" :key="index">
         {{ step }}
       </li>
     </ol>
@@ -28,7 +28,54 @@ import axios from "axios";
 
 export default {
   props: ["recipe"],
+  data() {
+    return {
+      recipeDetails: null,
+    };
+  },
+  watch: {
+    recipe: {
+      immediate: true,
+      handler(newRecipe) {
+        if (newRecipe?.apiId) {
+          this.fetchRecipeDetails(newRecipe.apiId);
+        } else {
+          this.recipeDetails = null;
+        }
+      },
+    },
+  },
   methods: {
+    async fetchRecipeDetails(apiId) {
+      try {
+        const response = await axios.get(
+            `https://api.spoonacular.com/recipes/${apiId}/information`,
+            {
+              params: {
+                apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
+              },
+            }
+        );
+        this.recipeDetails = {
+          title: response.data.title,
+          sourceUrl: response.data.sourceUrl,
+          sourceName: response.data.sourceName,
+          image: response.data.image,
+          ingredients: response.data.extendedIngredients.map((ingredient) => ({
+            id: ingredient.id,
+            name: ingredient.name,
+            amount: ingredient.amount,
+            unit: ingredient.unit,
+          })),
+          instructions:
+              response.data.analyzedInstructions[0]?.steps.map(
+                  (step) => step.step
+              ) || [],
+        };
+      } catch (error) {
+        console.error("Fehler beim Abrufen des Rezepts:", error);
+      }
+    },
     async saveToCookbook() {
       try {
         console.log("API ID:", this.recipe.apiId); // Debugging
