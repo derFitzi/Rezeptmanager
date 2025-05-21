@@ -38,6 +38,13 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
+    @GetMapping("/{apiId}")
+    public ResponseEntity<Recipe> getRecipeByApiId(@PathVariable Long apiId) {
+        Optional<Recipe> recipe = recipeService.findRecipeByApiId(apiId);
+        return recipe.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
     @DeleteMapping("/delete/{apiId}")
     public ResponseEntity<String> deleteRecipe(@PathVariable Long apiId) {
         try {
