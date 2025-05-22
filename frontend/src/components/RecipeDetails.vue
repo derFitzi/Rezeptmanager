@@ -73,7 +73,6 @@ export default {
               },
             }
         );
-        console.log("API-Request-Parameter:", { query, apiKey: "e7d045456c0f40da8b6db6fe7b794d3e" });
         this.recipeDetails = {
           title: response.data.title,
           sourceUrl: response.data.sourceUrl,

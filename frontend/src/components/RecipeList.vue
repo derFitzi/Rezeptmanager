@@ -22,7 +22,7 @@ export default {
   },
 };
 </script>
-z
+
 <style>
 .recipe-list {
   list-style: none;
