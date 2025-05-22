@@ -1,5 +1,6 @@
 package com.Rezeptmanager.Rezeptmanager.Service;
 
+import com.Rezeptmanager.Rezeptmanager.Controller.NoteResponse;
 import com.Rezeptmanager.Rezeptmanager.Model.Note;
 import com.Rezeptmanager.Rezeptmanager.Model.Recipe;
 import com.Rezeptmanager.Rezeptmanager.Repository.NoteRepository;
@@ -7,6 +8,7 @@ import com.Rezeptmanager.Rezeptmanager.Repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NoteService {
@@ -19,10 +21,8 @@ public class NoteService {
         this.recipeRepository = recipeRepository;
     }
 
-    public Note addNoteToRecipe(Long apiId, String content, Recipe recipeDetails) {
-        // Check if the recipe already exists in the database
+    public NoteResponse addNoteToRecipe(Long apiId, String content, Recipe recipeDetails) {
         Recipe recipe = recipeRepository.findByApiId(apiId).orElseGet(() -> {
-            // Save the recipe if it does not exist
             Recipe newRecipe = new Recipe();
             newRecipe.setApiId(apiId);
             newRecipe.setTitle(recipeDetails.getTitle());
@@ -32,18 +32,25 @@ public class NoteService {
             return recipeRepository.save(newRecipe);
         });
 
-        // Create a new note and associate it with the recipe
         Note note = new Note();
         note.setContent(content);
         note.setRecipe(recipe);
-        return noteRepository.save(note);
+        Note savedNote = noteRepository.save(note);
+
+        return new NoteResponse(savedNote.getId(), savedNote.getContent(), recipe.getId());
     }
 
-    public List<Note> getNotesByRecipeId(Long recipeId) {
-        return noteRepository.findByRecipeId(recipeId);
+    public List<NoteResponse> getNotesByRecipeId(Long recipeId) {
+        List<Note> notes = noteRepository.findByRecipeId(recipeId);
+        return notes.stream()
+                .map(note -> new NoteResponse(note.getId(), note.getContent(), note.getRecipe().getId()))
+                .collect(Collectors.toList());
     }
 
     public void deleteNoteById(Long noteId) {
+        if (!noteRepository.existsById(noteId)) {
+            throw new IllegalArgumentException("Note with ID " + noteId + " does not exist.");
+        }
         noteRepository.deleteById(noteId);
     }
 }

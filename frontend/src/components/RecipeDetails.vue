@@ -69,7 +69,7 @@ export default {
             `https://api.spoonacular.com/recipes/${apiId}/information`,
             {
               params: {
-                apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
+                apiKey: "b36c358f1dde45269e535eff1824af00",
               },
             }
         );
@@ -96,9 +96,15 @@ export default {
     async checkIfRecipeIsSaved(apiId) {
       try {
         const response = await axios.get(`/api/recipes/${apiId}`);
-        this.isRecipeSaved = !!response.data; // Recipe exists in DB
+        this.isRecipeSaved = !!response.data; // Rezept existiert in der DB
       } catch (error) {
-        this.isRecipeSaved = false;
+        console.error("Fehler beim Überprüfen, ob das Rezept gespeichert ist:", error.response?.data || error.message);
+        if (error.response?.status === 404) {
+          this.isRecipeSaved = false; // Rezept existiert nicht
+        } else {
+          // Bei anderen Fehlern den Status nicht ändern
+          console.warn("Unbekannter Fehler, Status von isRecipeSaved bleibt unverändert.");
+        }
       }
     },
     async fetchNotes(recipeId) {
@@ -115,52 +121,80 @@ export default {
         return;
       }
       if (!this.newNoteContent.trim()) return;
+
       try {
         const response = await axios.post(`/api/notes/${this.recipe.apiId}`, {
-          content: this.newNoteContent, // Sende die Notiz als JSON-Objekt
+          content: this.newNoteContent,
         });
-        this.notes.push(response.data); // Füge die neue Notiz zur Liste hinzu
-        this.newNoteContent = ""; // Leere das Eingabefeld
+
+        console.log("API-Antwort für hinzugefügte Note:", response.data);
+
+        // Extract only the necessary fields
+        const newNote = {
+          id: response.data.id,
+          content: response.data.content,
+        };
+
+        // Add the cleaned-up note to the notes array
+        this.notes = [...this.notes, newNote];
+
+        // Clear the input field
+        this.newNoteContent = "";
       } catch (error) {
         console.error("Fehler beim Hinzufügen der Notiz:", error.response?.data || error.message);
       }
     },
     async deleteNote(noteId) {
       try {
+        console.log("Lösche Notiz mit ID:", noteId); // Debugging
         await axios.delete(`/api/notes/${noteId}`);
         this.notes = this.notes.filter((note) => note.id !== noteId);
       } catch (error) {
-        console.error("Fehler beim Löschen der Notiz:", error);
+        console.error("Fehler beim Löschen der Notiz:", error.response?.data || error.message);
       }
     },
     async saveToCookbook() {
-      try {
-        const response = await axios.post("/api/recipes/save", {
-          apiId: this.recipe.apiId,
-          title: this.recipe.title,
-          imageUrl: this.recipe.image,
-          sourceUrl: this.recipe.sourceUrl,
-          instructions: this.recipe.instructions.slice(0, 1000).join("\n"),
-        });
-        this.isRecipeSaved = true;
-        alert("Rezept wurde erfolgreich ins Kochbuch gespeichert!");
-      } catch (error) {
-        if (error.response?.status === 409) {
-          alert("Rezept bereits im Kochbuch");
-        } else {
-          console.error("Fehler beim Speichern des Rezepts:", error);
-          alert("Fehler beim Speichern des Rezepts.");
+      if (!this.isRecipeSaved) {
+        try {
+          const response = await axios.post("/api/recipes/save", {
+            apiId: this.recipe.apiId,
+            title: this.recipe.title,
+            imageUrl: this.recipe.image,
+            sourceUrl: this.recipe.sourceUrl,
+            instructions: this.recipe.instructions.slice(0, 1000).join("\n"),
+          });
+          this.isRecipeSaved = true;
+          alert("Rezept wurde erfolgreich ins Kochbuch gespeichert!");
+
+          // Aktualisiere die Liste der Rezepte aus der Datenbank
+          this.$emit("update-db-recipes");
+        } catch (error) {
+          if (error.response?.status === 409) {
+            alert("Rezept bereits im Kochbuch");
+          } else {
+            console.error("Fehler beim Speichern des Rezepts:", error);
+            alert("Fehler beim Speichern des Rezepts.");
+          }
         }
+      } else {
+        alert("Rezept ist bereits im Kochbuch gespeichert.");
       }
     },
     async deleteFromCookbook() {
+      if (this.isRecipeSaved) {
       try {
         await axios.delete(`/api/recipes/delete/${this.recipe.apiId}`);
         this.isRecipeSaved = false;
         alert("Rezept wurde erfolgreich gelöscht.");
+
+        // Aktualisiere die Liste der Rezepte aus der Datenbank
+        this.$emit("update-db-recipes");
       } catch (error) {
         console.error("Fehler beim Löschen des Rezepts:", error);
         alert("Fehler beim Löschen des Rezepts.");
+      }}
+      else {
+        alert("Rezept ist nicht im Kochbuch gespeichert.");
       }
     },
   },

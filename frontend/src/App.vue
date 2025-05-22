@@ -5,7 +5,7 @@
       <RecipeList :recipes="recipes" @select-recipe="selectRecipe" />
     </div>
     <div class="middle">
-      <RecipeDetails :recipe="selectedRecipe" />
+      <RecipeDetails :recipe="selectedRecipe" @update-db-recipes="searchDbRecipes" />
     </div>
     <div class="right">
       <SearchBar v-model:searchQuery="dbSearchQuery" @search="searchDbRecipes" />
@@ -44,23 +44,19 @@ export default {
       }
 
       try {
-        console.log("API-Request-Parameter:", { query, apiKey: "e7d045456c0f40da8b6db6fe7b794d3e" });
-
         const response = await axios.get(
             `https://api.spoonacular.com/recipes/complexSearch`,
             {
               params: {
                 query,
-                apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
+                apiKey: "b36c358f1dde45269e535eff1824af00",
               },
             }
         );
 
         if (response.data && response.data.results) {
           this.recipes = response.data.results;
-          console.log("API-Antwort:", response.data);
         } else {
-          console.error("Unerwartete API-Antwort:", response.data);
           alert("Keine Ergebnisse gefunden.");
         }
       } catch (error) {
@@ -80,16 +76,14 @@ export default {
     },
     async selectRecipe(recipe) {
       if (recipe.apiId) {
-        // Rezept aus der Datenbank
         this.selectedRecipe = { apiId: recipe.apiId };
       } else {
-        // Rezept aus der API
         try {
           const response = await axios.get(
               `https://api.spoonacular.com/recipes/${recipe.id}/information`,
               {
                 params: {
-                  apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
+                  apiKey: "b36c358f1dde45269e535eff1824af00",
                 },
               }
           );

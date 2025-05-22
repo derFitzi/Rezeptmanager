@@ -1,9 +1,8 @@
 package com.Rezeptmanager.Rezeptmanager.Controller;
 
-import com.Rezeptmanager.Rezeptmanager.Model.Note;
-import com.Rezeptmanager.Rezeptmanager.Model.Recipe;
 import com.Rezeptmanager.Rezeptmanager.Service.NoteService;
-import org.springframework.http.HttpStatus;
+import com.Rezeptmanager.Rezeptmanager.Controller.NoteRequest;
+import com.Rezeptmanager.Rezeptmanager.Controller.NoteResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +19,14 @@ public class NoteController {
     }
 
     @PostMapping("/{apiId}")
-    public ResponseEntity<Note> addNote(@PathVariable Long apiId, @RequestBody NoteRequest noteRequest) {
-        Note note = noteService.addNoteToRecipe(apiId, noteRequest.getContent(), noteRequest.getRecipeDetails());
-        return ResponseEntity.status(HttpStatus.CREATED).body(note);
+    public ResponseEntity<NoteResponse> addNote(@PathVariable Long apiId, @RequestBody NoteRequest noteRequest) {
+        NoteResponse noteResponse = noteService.addNoteToRecipe(apiId, noteRequest.getContent(), noteRequest.getRecipeDetails());
+        return ResponseEntity.ok(noteResponse);
     }
 
     @GetMapping("/{recipeId}")
-    public ResponseEntity<List<Note>> getNotesByRecipeId(@PathVariable Long recipeId) {
-        List<Note> notes = noteService.getNotesByRecipeId(recipeId);
+    public ResponseEntity<List<NoteResponse>> getNotesByRecipeId(@PathVariable Long recipeId) {
+        List<NoteResponse> notes = noteService.getNotesByRecipeId(recipeId);
         return ResponseEntity.ok(notes);
     }
 

@@ -29,6 +29,7 @@ export default {
   padding: 0;
 }
 
+
 .recipe-item {
   cursor: pointer;
   padding: 10px;
