@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +22,11 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @PostMapping("/save")
-    public Recipe saveRecipe(@RequestBody Recipe recipe) {
-        System.out.println("Empfangene API ID: " + recipe.getApiId());
+    @PostMapping("/save-full")
+    public Recipe saveFullRecipe(@RequestBody Recipe recipe) {
+        if (recipe.getTitle() == null || recipe.getImageUrl() == null || recipe.getInstructions() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fehlende Felder im Rezept");
+        }
         return recipeService.saveRecipe(recipe);
     }
 

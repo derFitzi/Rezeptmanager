@@ -27,7 +27,6 @@ public class NoteService {
             newRecipe.setApiId(apiId);
             newRecipe.setTitle(recipeDetails.getTitle());
             newRecipe.setImageUrl(recipeDetails.getImageUrl());
-            newRecipe.setSourceUrl(recipeDetails.getSourceUrl());
             newRecipe.setInstructions(recipeDetails.getInstructions());
             return recipeRepository.save(newRecipe);
         });

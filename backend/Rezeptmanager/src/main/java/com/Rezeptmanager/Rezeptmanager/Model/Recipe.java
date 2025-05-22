@@ -16,14 +16,32 @@ public class Recipe {
 
     private String imageUrl;
 
-    private String sourceUrl;
-
     @Column(length = 5000)
     private String instructions;
+
+    private Integer readyInMinutes;
+
+    private Integer servings;
+
+    @Column(length = 5000)
+    private String summary;
+
+    private Integer healthScore;
+
+    private Double pricePerServing;
+
+    private Integer aggregateLikes;
+
+    @ElementCollection
+    private List<String> diets;
+
+    @ElementCollection
+    private List<String> dishTypes;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Note> notes;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -56,13 +74,6 @@ public class Recipe {
         this.imageUrl = imageUrl;
     }
 
-    public String getSourceUrl() {
-        return sourceUrl;
-    }
-
-    public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl;
-    }
 
     public String getInstructions() {
         return instructions;
@@ -70,6 +81,70 @@ public class Recipe {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public Integer getReadyInMinutes() {
+        return readyInMinutes;
+    }
+
+    public void setReadyInMinutes(Integer readyInMinutes) {
+        this.readyInMinutes = readyInMinutes;
+    }
+
+    public Integer getServings() {
+        return servings;
+    }
+
+    public void setServings(Integer servings) {
+        this.servings = servings;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public Integer getHealthScore() {
+        return healthScore;
+    }
+
+    public void setHealthScore(Integer healthScore) {
+        this.healthScore = healthScore;
+    }
+
+    public Double getPricePerServing() {
+        return pricePerServing;
+    }
+
+    public void setPricePerServing(Double pricePerServing) {
+        this.pricePerServing = pricePerServing;
+    }
+
+    public Integer getAggregateLikes() {
+        return aggregateLikes;
+    }
+
+    public void setAggregateLikes(Integer aggregateLikes) {
+        this.aggregateLikes = aggregateLikes;
+    }
+
+    public List<String> getDiets() {
+        return diets;
+    }
+
+    public void setDiets(List<String> diets) {
+        this.diets = diets;
+    }
+
+    public List<String> getDishTypes() {
+        return dishTypes;
+    }
+
+    public void setDishTypes(List<String> dishTypes) {
+        this.dishTypes = dishTypes;
     }
 
     public List<Note> getNotes() {

@@ -3,8 +3,15 @@
     <h1>{{ recipeDetails.title }}</h1>
     <button @click="saveToCookbook">Im Kochbuch Speichern</button>
     <button @click="deleteFromCookbook">Rezept löschen</button>
-    <p><strong>Quelle:</strong> <a :href="recipeDetails.sourceUrl" target="_blank">{{ recipeDetails.sourceName }}</a></p>
     <img :src="recipeDetails.image" :alt="recipeDetails.title" class="recipe-image" />
+    <p><strong>Zubereitungszeit:</strong> {{ recipeDetails.readyInMinutes }} Minuten</p>
+    <p><strong>Portionen:</strong> {{ recipeDetails.servings }}</p>
+    <p><strong>Zusammenfassung:</strong> <span v-html="recipeDetails.summary"></span></p>
+    <p><strong>Gesundheitsbewertung:</strong> {{ recipeDetails.healthScore }}/100</p>
+    <p><strong>Preis pro Portion:</strong> {{ recipeDetails.pricePerServing.toFixed(2) }} €</p>
+    <p><strong>Beliebtheit:</strong> {{ recipeDetails.aggregateLikes }} Likes</p>
+    <p><strong>Diäten:</strong> {{ recipeDetails.diets.join(", ") }}</p>
+    <p><strong>Gerichtstypen:</strong> {{ recipeDetails.dishTypes.join(", ") }}</p>
     <h2>Zutaten</h2>
     <ul>
       <li v-for="ingredient in recipeDetails.ingredients" :key="ingredient.id">
@@ -17,7 +24,6 @@
         {{ step }}
       </li>
     </ol>
-
     <h2>Notizen</h2>
     <ul>
       <li v-for="note in notes" :key="note.id">
@@ -78,6 +84,14 @@ export default {
           sourceUrl: response.data.sourceUrl,
           sourceName: response.data.sourceName,
           image: response.data.image,
+          readyInMinutes: response.data.readyInMinutes,
+          servings: response.data.servings,
+          summary: response.data.summary,
+          healthScore: response.data.healthScore,
+          pricePerServing: response.data.pricePerServing / 100,
+          aggregateLikes: response.data.aggregateLikes,
+          diets: response.data.diets || [],
+          dishTypes: response.data.dishTypes || [],
           ingredients: response.data.extendedIngredients.map((ingredient) => ({
             id: ingredient.id,
             name: ingredient.name,
@@ -96,14 +110,18 @@ export default {
     async checkIfRecipeIsSaved(apiId) {
       try {
         const response = await axios.get(`/api/recipes/${apiId}`);
-        this.isRecipeSaved = !!response.data; // Rezept existiert in der DB
+        this.isRecipeSaved = !!response.data;
       } catch (error) {
-        console.error("Fehler beim Überprüfen, ob das Rezept gespeichert ist:", error.response?.data || error.message);
+        console.error(
+            "Fehler beim Überprüfen, ob das Rezept gespeichert ist:",
+            error.response?.data || error.message
+        );
         if (error.response?.status === 404) {
-          this.isRecipeSaved = false; // Rezept existiert nicht
+          this.isRecipeSaved = false;
         } else {
-          // Bei anderen Fehlern den Status nicht ändern
-          console.warn("Unbekannter Fehler, Status von isRecipeSaved bleibt unverändert.");
+          console.warn(
+              "Unbekannter Fehler, Status von isRecipeSaved bleibt unverändert."
+          );
         }
       }
     },
@@ -127,53 +145,55 @@ export default {
           content: this.newNoteContent,
         });
 
-        console.log("API-Antwort für hinzugefügte Note:", response.data);
-
-        // Extract only the necessary fields
         const newNote = {
           id: response.data.id,
           content: response.data.content,
         };
 
-        // Add the cleaned-up note to the notes array
         this.notes = [...this.notes, newNote];
-
-        // Clear the input field
         this.newNoteContent = "";
       } catch (error) {
-        console.error("Fehler beim Hinzufügen der Notiz:", error.response?.data || error.message);
+        console.error(
+            "Fehler beim Hinzufügen der Notiz:",
+            error.response?.data || error.message
+        );
       }
     },
     async deleteNote(noteId) {
       try {
-        console.log("Lösche Notiz mit ID:", noteId); // Debugging
         await axios.delete(`/api/notes/${noteId}`);
         this.notes = this.notes.filter((note) => note.id !== noteId);
       } catch (error) {
-        console.error("Fehler beim Löschen der Notiz:", error.response?.data || error.message);
+        console.error(
+            "Fehler beim Löschen der Notiz:",
+            error.response?.data || error.message
+        );
       }
     },
     async saveToCookbook() {
       if (!this.isRecipeSaved) {
         try {
-          const response = await axios.post("/api/recipes/save", {
+          const response = await axios.post("/api/recipes/save-full", {
             apiId: this.recipe.apiId,
-            title: this.recipe.title,
-            imageUrl: this.recipe.image,
-            sourceUrl: this.recipe.sourceUrl,
-            instructions: this.recipe.instructions.slice(0, 1000).join("\n"),
+            title: this.recipeDetails.title,
+            imageUrl: this.recipeDetails.image,
+            instructions: this.recipeDetails.instructions.join("\n"),
+            readyInMinutes: this.recipeDetails.readyInMinutes,
+            servings: this.recipeDetails.servings,
+            summary: this.recipeDetails.summary,
+            healthScore: this.recipeDetails.healthScore,
+            pricePerServing: this.recipeDetails.pricePerServing,
+            aggregateLikes: this.recipeDetails.aggregateLikes,
+            diets: this.recipeDetails.diets,
+            dishTypes: this.recipeDetails.dishTypes,
           });
-          this.isRecipeSaved = true;
-          alert("Rezept wurde erfolgreich ins Kochbuch gespeichert!");
-
-          // Aktualisiere die Liste der Rezepte aus der Datenbank
+          alert("Rezept wurde erfolgreich gespeichert!");
           this.$emit("update-db-recipes");
         } catch (error) {
           if (error.response?.status === 409) {
-            alert("Rezept bereits im Kochbuch");
+            alert("Rezept ist bereits gespeichert.");
           } else {
             console.error("Fehler beim Speichern des Rezepts:", error);
-            alert("Fehler beim Speichern des Rezepts.");
           }
         }
       } else {
@@ -182,18 +202,16 @@ export default {
     },
     async deleteFromCookbook() {
       if (this.isRecipeSaved) {
-      try {
-        await axios.delete(`/api/recipes/delete/${this.recipe.apiId}`);
-        this.isRecipeSaved = false;
-        alert("Rezept wurde erfolgreich gelöscht.");
-
-        // Aktualisiere die Liste der Rezepte aus der Datenbank
-        this.$emit("update-db-recipes");
-      } catch (error) {
-        console.error("Fehler beim Löschen des Rezepts:", error);
-        alert("Fehler beim Löschen des Rezepts.");
-      }}
-      else {
+        try {
+          await axios.delete(`/api/recipes/delete/${this.recipe.apiId}`);
+          this.isRecipeSaved = false;
+          alert("Rezept wurde erfolgreich gelöscht.");
+          this.$emit("update-db-recipes");
+        } catch (error) {
+          console.error("Fehler beim Löschen des Rezepts:", error);
+          alert("Fehler beim Löschen des Rezepts.");
+        }
+      } else {
         alert("Rezept ist nicht im Kochbuch gespeichert.");
       }
     },
