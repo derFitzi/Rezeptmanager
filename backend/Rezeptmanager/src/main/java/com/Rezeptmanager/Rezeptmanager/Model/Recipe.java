@@ -1,5 +1,6 @@
 package com.Rezeptmanager.Rezeptmanager.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Recipe {
 
     private String title;
 
-    private String imageUrl;
+    private String image;
 
     @Column(length = 5000)
     private String instructions;
@@ -39,9 +40,9 @@ public class Recipe {
     private List<String> dishTypes;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Note> notes;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -66,14 +67,13 @@ public class Recipe {
         this.title = title;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
-
 
     public String getInstructions() {
         return instructions;

@@ -49,7 +49,7 @@ export default {
             {
               params: {
                 query,
-                apiKey: "b36c358f1dde45269e535eff1824af00",
+                apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
               },
             }
         );
@@ -83,7 +83,7 @@ export default {
               `https://api.spoonacular.com/recipes/${recipe.id}/information`,
               {
                 params: {
-                  apiKey: "b36c358f1dde45269e535eff1824af00",
+                  apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
                 },
               }
           );

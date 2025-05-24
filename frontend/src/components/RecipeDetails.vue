@@ -41,6 +41,7 @@
 
 <script>
 import axios from "axios";
+import data from "bootstrap/js/src/dom/data";
 
 export default {
   props: ["recipe"],
@@ -58,8 +59,8 @@ export default {
       handler(newRecipe) {
         if (newRecipe?.apiId) {
           this.fetchRecipeDetails(newRecipe.apiId);
-          this.checkIfRecipeIsSaved(newRecipe.apiId);
           this.fetchNotes(newRecipe.apiId);
+          this.checkIfRecipeIsSaved(newRecipe.apiId);
         } else {
           this.recipeDetails = null;
           this.notes = [];
@@ -71,11 +72,12 @@ export default {
   methods: {
     async fetchRecipeDetails(apiId) {
       try {
+        console.log("Abrufen der Rezeptdetails für API ID:", apiId); // Debugging
         const response = await axios.get(
             `https://api.spoonacular.com/recipes/${apiId}/information`,
             {
               params: {
-                apiKey: "b36c358f1dde45269e535eff1824af00",
+                apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
               },
             }
         );
@@ -112,25 +114,38 @@ export default {
         const response = await axios.get(`/api/recipes/${apiId}`);
         this.isRecipeSaved = !!response.data;
       } catch (error) {
-        console.error(
-            "Fehler beim Überprüfen, ob das Rezept gespeichert ist:",
-            error.response?.data || error.message
-        );
         if (error.response?.status === 404) {
+          console.warn("Rezept nicht in der Datenbank gefunden."); // Benutzerfreundliche Warnung
           this.isRecipeSaved = false;
         } else {
-          console.warn(
-              "Unbekannter Fehler, Status von isRecipeSaved bleibt unverändert."
+          console.error(
+              "Unbekannter Fehler beim Überprüfen, ob das Rezept gespeichert ist:",
+              error.response?.data || error.message
           );
         }
       }
     },
     async fetchNotes(recipeId) {
+      console.log("Abrufen der Notizen für Recipe ID:", recipeId); // Debugging
+      this.notes = []; // Alte Notizen leeren
+
       try {
-        const response = await axios.get(`/api/notes/${recipeId}`);
+        // Abrufen des Rezepts aus der Datenbank
+        const responseRecipe = await axios.get(`/api/recipes/${recipeId}`);
+        const dbRecipeId = responseRecipe.data.id; // Korrektes Extrahieren der ID
+        console.log("Abrufen der Notizen für neue Recipe ID:", dbRecipeId); // Debugging
+
+        // Abrufen der Notizen mit der Rezept-ID
+        const response = await axios.get(`/api/notes/${dbRecipeId}`);
+        console.log("Erhaltene Notizen:", response.data); // Debugging
         this.notes = response.data;
       } catch (error) {
-        console.error("Fehler beim Abrufen der Notizen:", error);
+        if (error.response?.status === 404) {
+          console.warn("Rezept oder Notizen nicht gefunden."); // Benutzerfreundliche Warnung
+        } else {
+          console.error("Fehler beim Abrufen der Notizen oder Rezept-ID:", error);
+        }
+        this.notes = []; // Sicherstellen, dass die Notizenliste leer bleibt
       }
     },
     async addNote() {
@@ -176,7 +191,7 @@ export default {
           const response = await axios.post("/api/recipes/save-full", {
             apiId: this.recipe.apiId,
             title: this.recipeDetails.title,
-            imageUrl: this.recipeDetails.image,
+            image: this.recipeDetails.image,
             instructions: this.recipeDetails.instructions.join("\n"),
             readyInMinutes: this.recipeDetails.readyInMinutes,
             servings: this.recipeDetails.servings,
@@ -187,6 +202,7 @@ export default {
             diets: this.recipeDetails.diets,
             dishTypes: this.recipeDetails.dishTypes,
           });
+          this.isRecipeSaved = true;
           alert("Rezept wurde erfolgreich gespeichert!");
           this.$emit("update-db-recipes");
         } catch (error) {
@@ -231,3 +247,4 @@ export default {
   margin: 10px 0;
 }
 </style>
+

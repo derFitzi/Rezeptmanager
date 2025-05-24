@@ -10,6 +10,12 @@ if (typeof process === 'undefined') {
     };
 }
 
+// globale Fehlererkennung
+window.addEventListener('unhandledrejection', event => {
+    console.error('Unhandled promise rejection:', event.reason);
+    event.preventDefault();
+});
+
 const app = createApp(App);
 
 app.use(router);

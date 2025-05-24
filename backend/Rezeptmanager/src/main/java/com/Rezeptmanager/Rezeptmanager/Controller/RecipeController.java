@@ -24,7 +24,7 @@ public class RecipeController {
 
     @PostMapping("/save-full")
     public Recipe saveFullRecipe(@RequestBody Recipe recipe) {
-        if (recipe.getTitle() == null || recipe.getImageUrl() == null || recipe.getInstructions() == null) {
+        if (recipe.getTitle() == null || recipe.getImage() == null || recipe.getInstructions() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fehlende Felder im Rezept");
         }
         return recipeService.saveRecipe(recipe);
