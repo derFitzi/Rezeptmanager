@@ -67,11 +67,11 @@ export default {
     async searchDbRecipes(query) {
       try {
         const response = await axios.get("/api/recipes/search", {
-          params: { query },
+          params: { query: query || this.dbSearchQuery },
         });
         this.dbRecipes = response.data;
       } catch (error) {
-        console.error("Fehler beim Abrufen der Rezepte aus der DB:", error);
+        console.error("Fehler beim Abrufen der Rezepte aus der Datenbank:", error);
       }
     },
     async selectRecipe(recipe) {

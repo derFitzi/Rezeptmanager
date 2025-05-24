@@ -2,6 +2,8 @@ package com.Rezeptmanager.Rezeptmanager.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Note {
@@ -10,7 +12,8 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 1000)
+    @NotNull(message = "Der Content darf nicht null sein.")
+    @Size(min = 1, max = 1000, message = "Der Titel muss zwischen 1 und 1000 Zeichen lang sein.")
     private String content;
 
     @ManyToOne

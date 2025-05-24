@@ -2,6 +2,7 @@ package com.Rezeptmanager.Rezeptmanager.Controller;
 
 import com.Rezeptmanager.Rezeptmanager.Model.ExampleEntity;
 import com.Rezeptmanager.Rezeptmanager.Service.ExampleEntityService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +17,14 @@ public class ExampleEntityController {
         this.service = service;
     }
 
+
     @GetMapping
     public List<ExampleEntity> getAllEntities() {
         return service.getAllEntities();
     }
 
     @PostMapping
-    public ExampleEntity saveEntity(@RequestBody ExampleEntity entity) {
+    public ExampleEntity saveEntity(@Valid @RequestBody ExampleEntity entity) {
         return service.saveEntity(entity);
     }
 }

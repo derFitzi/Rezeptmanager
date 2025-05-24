@@ -141,7 +141,7 @@ export default {
         this.notes = response.data;
       } catch (error) {
         if (error.response?.status === 404) {
-          console.warn("Rezept oder Notizen nicht gefunden."); // Benutzerfreundliche Warnung
+          console.warn("Notizen nicht gefunden."); // Benutzerfreundliche Warnung
         } else {
           console.error("Fehler beim Abrufen der Notizen oder Rezept-ID:", error);
         }
@@ -204,7 +204,7 @@ export default {
           });
           this.isRecipeSaved = true;
           alert("Rezept wurde erfolgreich gespeichert!");
-          this.$emit("update-db-recipes");
+          this.$emit("update-db-recipes", this.$parent.dbSearchQuery); // Trigger search
         } catch (error) {
           if (error.response?.status === 409) {
             alert("Rezept ist bereits gespeichert.");
@@ -222,7 +222,7 @@ export default {
           await axios.delete(`/api/recipes/delete/${this.recipe.apiId}`);
           this.isRecipeSaved = false;
           alert("Rezept wurde erfolgreich gelöscht.");
-          this.$emit("update-db-recipes");
+          this.$emit("update-db-recipes", this.$parent.dbSearchQuery); // Trigger search
         } catch (error) {
           console.error("Fehler beim Löschen des Rezepts:", error);
           alert("Fehler beim Löschen des Rezepts.");
