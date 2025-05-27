@@ -25,7 +25,7 @@ public class Recipe {
     @NotNull(message = "Das Bild darf nicht null sein.")
     private String image;
 
-    @Column(length = 5000)
+    @Column(columnDefinition = "TEXT")
     @NotNull(message = "Die Anweisungen dürfen nicht null sein.")
     private String instructions;
 
@@ -59,6 +59,11 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Note> notes;
+
+    @Lob
+    private String ingredients; // Zutaten als String gespeichert
+
+
 
     public Long getId() {
         return id;
@@ -170,5 +175,13 @@ public class Recipe {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 }

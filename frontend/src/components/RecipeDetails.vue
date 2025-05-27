@@ -41,7 +41,6 @@
 
 <script>
 import axios from "axios";
-import data from "bootstrap/js/src/dom/data";
 
 export default {
   props: ["recipe"],
@@ -51,103 +50,159 @@ export default {
       notes: [],
       newNoteContent: "",
       isRecipeSaved: false,
+      currentApiId: null, // Track current recipe to detect changes
     };
   },
   watch: {
     recipe: {
       immediate: true,
-      handler(newRecipe) {
+      async handler(newRecipe) {
         if (newRecipe?.apiId) {
-          this.fetchRecipeDetails(newRecipe.apiId);
-          this.fetchNotes(newRecipe.apiId);
-          this.checkIfRecipeIsSaved(newRecipe.apiId);
+          // Reset state when switching to a different recipe
+          if (this.currentApiId !== newRecipe.apiId) {
+            this.resetState();
+            this.currentApiId = newRecipe.apiId;
+
+            // First check if recipe is saved, then fetch details
+            await this.checkIfRecipeIsSaved(newRecipe.apiId);
+            await this.fetchRecipeDetails(newRecipe.apiId);
+            await this.fetchNotes(newRecipe.apiId);
+          }
         } else {
-          this.recipeDetails = null;
-          this.notes = [];
-          this.isRecipeSaved = false;
+          this.resetState();
         }
       },
     },
   },
   methods: {
-    async fetchRecipeDetails(apiId) {
-      try {
-        console.log("Abrufen der Rezeptdetails für API ID:", apiId); // Debugging
-        const response = await axios.get(
-            `https://api.spoonacular.com/recipes/${apiId}/information`,
-            {
-              params: {
-                apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
-              },
-            }
-        );
-        this.recipeDetails = {
-          title: response.data.title,
-          sourceUrl: response.data.sourceUrl,
-          sourceName: response.data.sourceName,
-          image: response.data.image,
-          readyInMinutes: response.data.readyInMinutes,
-          servings: response.data.servings,
-          summary: response.data.summary,
-          healthScore: response.data.healthScore,
-          pricePerServing: response.data.pricePerServing / 100,
-          aggregateLikes: response.data.aggregateLikes,
-          diets: response.data.diets || [],
-          dishTypes: response.data.dishTypes || [],
-          ingredients: response.data.extendedIngredients.map((ingredient) => ({
-            id: ingredient.id,
-            name: ingredient.name,
-            amount: ingredient.amount,
-            unit: ingredient.unit,
-          })),
-          instructions:
-              response.data.analyzedInstructions[0]?.steps.map(
-                  (step) => step.step
-              ) || [],
-        };
-      } catch (error) {
-        console.error("Fehler beim Abrufen des Rezepts:", error);
-      }
+    resetState() {
+      this.recipeDetails = null;
+      this.notes = [];
+      this.isRecipeSaved = false;
+      this.currentApiId = null;
+      this.newNoteContent = "";
     },
+
     async checkIfRecipeIsSaved(apiId) {
       try {
         const response = await axios.get(`/api/recipes/${apiId}`);
         this.isRecipeSaved = !!response.data;
+        console.log(`Recipe ${apiId} is saved:`, this.isRecipeSaved);
       } catch (error) {
         if (error.response?.status === 404) {
-          console.warn("Rezept nicht in der Datenbank gefunden."); // Benutzerfreundliche Warnung
+          // Recipe not in database - this is normal for new API recipes
           this.isRecipeSaved = false;
         } else {
-          console.error(
-              "Unbekannter Fehler beim Überprüfen, ob das Rezept gespeichert ist:",
-              error.response?.data || error.message
-          );
+          console.error("Error checking if recipe is saved:", error);
+          this.isRecipeSaved = false;
         }
       }
     },
+
+    async fetchRecipeDetails(apiId) {
+      try {
+        if (this.isRecipeSaved) {
+          // Load from database
+          console.log("Loading recipe from database:", apiId);
+          const response = await axios.get(`/api/recipes/${apiId}`);
+          console.log("DB Response data:", response.data); // Debug log
+
+          this.recipeDetails = {
+            title: response.data.title,
+            sourceUrl: response.data.sourceUrl,
+            sourceName: response.data.sourceName,
+            image: response.data.image,
+            readyInMinutes: response.data.readyInMinutes,
+            servings: response.data.servings,
+            summary: response.data.summary,
+            healthScore: response.data.healthScore,
+            pricePerServing: (response.data.pricePerServing || 0) / 100,
+            aggregateLikes: response.data.aggregateLikes,
+            diets: response.data.diets || [],
+            dishTypes: response.data.dishTypes || [],
+            ingredients: response.data.ingredients ?
+                JSON.parse(response.data.ingredients).map(
+                    (ingredient) => ({
+                      id: ingredient.id,
+                      name: ingredient.name,
+                      amount: ingredient.amount,
+                      unit: ingredient.unit,
+                    })
+                ) : [],
+            instructions: response.data.analyzedInstructions ?
+                (JSON.parse(response.data.analyzedInstructions)[0]?.steps.map(
+                    (step) => step.step
+                ) || []) : [],
+          };
+        } else {
+          // Load from API
+          console.log("Loading recipe from API:", apiId);
+          const response = await axios.get(
+              `https://api.spoonacular.com/recipes/${apiId}/information`,
+              {
+                params: {
+                  apiKey: "e7d045456c0f40da8b6db6fe7b794d3e",
+                },
+              }
+          );
+          this.recipeDetails = {
+            title: response.data.title,
+            sourceUrl: response.data.sourceUrl,
+            sourceName: response.data.sourceName,
+            image: response.data.image,
+            readyInMinutes: response.data.readyInMinutes,
+            servings: response.data.servings,
+            summary: response.data.summary,
+            healthScore: response.data.healthScore,
+            pricePerServing: response.data.pricePerServing / 100,
+            aggregateLikes: response.data.aggregateLikes,
+            diets: response.data.diets || [],
+            dishTypes: response.data.dishTypes || [],
+            ingredients: response.data.extendedIngredients.map((ingredient) => ({
+              id: ingredient.id,
+              name: ingredient.name,
+              amount: ingredient.amount,
+              unit: ingredient.unit,
+            })),
+            instructions:
+                response.data.analyzedInstructions[0]?.steps.map(
+                    (step) => step.step
+                ) || [],
+          };
+        }
+      } catch (error) {
+        console.error("Error fetching recipe details:", error);
+        this.recipeDetails = null;
+      }
+    },
+
     async fetchNotes(recipeId) {
-      console.log("Abrufen der Notizen für Recipe ID:", recipeId); // Debugging
-      this.notes = []; // Alte Notizen leeren
+      console.log("Fetching notes for recipe ID:", recipeId);
+      this.notes = [];
+
+      if (!this.isRecipeSaved) {
+        console.log("Recipe not saved, no notes to fetch");
+        return;
+      }
 
       try {
-        // Abrufen des Rezepts aus der Datenbank
         const responseRecipe = await axios.get(`/api/recipes/${recipeId}`);
-        const dbRecipeId = responseRecipe.data.id; // Korrektes Extrahieren der ID
-        console.log("Abrufen der Notizen für neue Recipe ID:", dbRecipeId); // Debugging
+        const dbRecipeId = responseRecipe.data.id;
+        console.log("Fetching notes for DB recipe ID:", dbRecipeId);
 
-        // Abrufen der Notizen mit der Rezept-ID
         const response = await axios.get(`/api/notes/${dbRecipeId}`);
-        console.log("Erhaltene Notizen:", response.data); // Debugging
+        console.log("Received notes:", response.data);
         this.notes = response.data;
       } catch (error) {
         if (error.response?.status === 404) {
-          console.warn("Notizen nicht gefunden."); // Benutzerfreundliche Warnung
+          console.log("No notes found for recipe");
         } else {
-          console.error("Fehler beim Abrufen der Notizen oder Rezept-ID:", error);
+          console.error("Error fetching notes:", error);
         }
-        this.notes = []; // Sicherstellen, dass die Notizenliste leer bleibt
+        this.notes = [];
       }
     },
+
     async addNote() {
       if (!this.isRecipeSaved) {
         alert("Rezept muss zuerst gespeichert werden, um Notizen hinzuzufügen.");
@@ -168,67 +223,78 @@ export default {
         this.notes = [...this.notes, newNote];
         this.newNoteContent = "";
       } catch (error) {
-        console.error(
-            "Fehler beim Hinzufügen der Notiz:",
-            error.response?.data || error.message
-        );
+        console.error("Error adding note:", error.response?.data || error.message);
       }
     },
+
     async deleteNote(noteId) {
       try {
         await axios.delete(`/api/notes/${noteId}`);
         this.notes = this.notes.filter((note) => note.id !== noteId);
       } catch (error) {
-        console.error(
-            "Fehler beim Löschen der Notiz:",
-            error.response?.data || error.message
-        );
+        console.error("Error deleting note:", error.response?.data || error.message);
       }
     },
+
     async saveToCookbook() {
-      if (!this.isRecipeSaved) {
-        try {
-          const response = await axios.post("/api/recipes/save-full", {
-            apiId: this.recipe.apiId,
-            title: this.recipeDetails.title,
-            image: this.recipeDetails.image,
-            instructions: this.recipeDetails.instructions.join("\n"),
-            readyInMinutes: this.recipeDetails.readyInMinutes,
-            servings: this.recipeDetails.servings,
-            summary: this.recipeDetails.summary,
-            healthScore: this.recipeDetails.healthScore,
-            pricePerServing: this.recipeDetails.pricePerServing,
-            aggregateLikes: this.recipeDetails.aggregateLikes,
-            diets: this.recipeDetails.diets,
-            dishTypes: this.recipeDetails.dishTypes,
-          });
-          this.isRecipeSaved = true;
-          alert("Rezept wurde erfolgreich gespeichert!");
-          this.$emit("update-db-recipes", this.$parent.dbSearchQuery); // Trigger search
-        } catch (error) {
-          if (error.response?.status === 409) {
-            alert("Rezept ist bereits gespeichert.");
-          } else {
-            console.error("Fehler beim Speichern des Rezepts:", error);
-          }
-        }
-      } else {
+      if (this.isRecipeSaved) {
         alert("Rezept ist bereits im Kochbuch gespeichert.");
+        return;
+      }
+
+      try {
+        const response = await axios.post("/api/recipes/save-full", {
+          apiId: this.recipe.apiId,
+          title: this.recipeDetails.title,
+          image: this.recipeDetails.image,
+          readyInMinutes: this.recipeDetails.readyInMinutes,
+          servings: this.recipeDetails.servings,
+          summary: this.recipeDetails.summary,
+          healthScore: this.recipeDetails.healthScore,
+          pricePerServing: this.recipeDetails.pricePerServing,
+          aggregateLikes: this.recipeDetails.aggregateLikes,
+          diets: this.recipeDetails.diets,
+          dishTypes: this.recipeDetails.dishTypes,
+          ingredients: JSON.stringify(
+              this.recipeDetails.ingredients.map((ingredient) => ({
+                id: ingredient.id,
+                name: ingredient.name,
+                amount: ingredient.amount,
+                unit: ingredient.unit,
+              }))
+          ),
+          instructions: JSON.stringify(this.recipeDetails.instructions),
+        });
+
+        this.isRecipeSaved = true;
+        alert("Rezept wurde erfolgreich gespeichert!");
+        this.$emit("update-db-recipes", this.$parent.dbSearchQuery);
+      } catch (error) {
+        if (error.response?.status === 409) {
+          alert("Rezept ist bereits gespeichert.");
+          this.isRecipeSaved = true; // Update local state
+        } else {
+          console.error("Error saving recipe:", error);
+          alert("Fehler beim Speichern des Rezepts.");
+        }
       }
     },
+
     async deleteFromCookbook() {
-      if (this.isRecipeSaved) {
-        try {
-          await axios.delete(`/api/recipes/delete/${this.recipe.apiId}`);
-          this.isRecipeSaved = false;
-          alert("Rezept wurde erfolgreich gelöscht.");
-          this.$emit("update-db-recipes", this.$parent.dbSearchQuery); // Trigger search
-        } catch (error) {
-          console.error("Fehler beim Löschen des Rezepts:", error);
-          alert("Fehler beim Löschen des Rezepts.");
-        }
-      } else {
+      if (!this.isRecipeSaved) {
         alert("Rezept ist nicht im Kochbuch gespeichert.");
+        return;
+      }
+
+      try {
+        await axios.delete(`/api/recipes/delete/${this.recipe.apiId}`);
+        this.isRecipeSaved = false;
+        this.notes = []; // Clear notes when recipe is deleted
+        alert("Rezept wurde erfolgreich gelöscht.");
+        this.$emit("update-db-recipes", this.$parent.dbSearchQuery);
+      } catch (error) {
+        console.error("Error deleting recipe:", error);
+        alert("Fehler beim Löschen des Rezepts.");
       }
     },
   },
@@ -247,4 +313,3 @@ export default {
   margin: 10px 0;
 }
 </style>
-
