@@ -13,10 +13,11 @@ import java.util.List;
 public class Recipe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Generiert automatisch die ID-Werte
     private Long id;
 
-    private Long apiId;
+    @NotNull(message = "API ID darf nicht null sein.")
+    private Long apiId; // API-ID des Rezepts
 
     @NotNull(message = "Der Titel darf nicht null sein.")
     @Size(min = 3, max = 100, message = "Der Titel muss zwischen 3 und 100 Zeichen lang sein.")
@@ -25,7 +26,7 @@ public class Recipe {
     @NotNull(message = "Das Bild darf nicht null sein.")
     private String image;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT") // Speichert die Anweisungen als Text
     @NotNull(message = "Die Anweisungen dürfen nicht null sein.")
     private String instructions;
 
@@ -38,7 +39,6 @@ public class Recipe {
     @Column(length = 5000)
     private String summary;
 
-
     @Min(value = 0, message = "Der Health-Score darf nicht negativ sein.")
     private Integer healthScore;
 
@@ -48,23 +48,22 @@ public class Recipe {
     @Min(value = 0, message = "Die Anzahl der Likes darf nicht negativ sein.")
     private Integer aggregateLikes;
 
-    @ElementCollection
-    @Size(max = 50, message = "Es dürfen maximal 50 Diäten angegeben werden.")
+    @ElementCollection // Speichert eine Liste von Diäten
+    @Size(max = 50, message = "Es dürfen maximal 50 Diäten angegeben werden.") // Validiert die maximale Anzahl der Diäten
     private List<String> diets;
 
-    @ElementCollection
-    @Size(max = 50, message = "Es dürfen maximal 50 Gerichtstypen angegeben werden.")
+    @ElementCollection // Speichert eine Liste von Gerichtstypen
+    @Size(max = 50, message = "Es dürfen maximal 50 Gerichtstypen angegeben werden.") // Validiert die maximale Anzahl der Gerichtstypen
     private List<String> dishTypes;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true) //One-to-Many-Beziehung zu Notes
+    @JsonManagedReference // Verhindert eine rekursive Serialisierung
     private List<Note> notes;
 
-    @Lob
+    @Lob // Speichert die Zutaten als Large Object (weil Json als Text gespeichert und der ist extem lang und komplex)
     private String ingredients; // Zutaten als String gespeichert
 
-
-
+    // Getter und Setter für die Felder
     public Long getId() {
         return id;
     }

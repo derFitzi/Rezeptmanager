@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
-    Optional<Recipe> findByApiId(Long apiId);
-    List<Recipe> findByTitleContainingIgnoreCase(String title);
-    void deleteByApiId(Long apiId);
+    Optional<Recipe> findByApiId(Long apiId); // Findet ein Rezept basierend auf der API-ID
+    List<Recipe> findByTitleContainingIgnoreCase(String title); // Findet Rezepte, mit dem Suchbegriff
+    void deleteByApiId(Long apiId); // Löscht ein Rezept basierend auf der API-ID
 }

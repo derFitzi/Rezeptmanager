@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface NoteRepository extends JpaRepository<Note, Long> {
-    List<Note> findByRecipeId(Long recipeId);
+    List<Note> findByRecipeId(Long recipeId);// Findet ein Rezept basierend auf der Rezept-ID
 }
