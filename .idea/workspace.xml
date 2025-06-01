@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e7f20a43-a01c-4771-a220-0da32bb0d83d" name="Changes" comment="Fertig" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="Vue Composition API Component" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Test-Zwischenstand" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2vOjLOCsGk4QqaUMNpuz3HiaU7s" />
+  <component name="ProjectViewState">
+    <option name="flattenModules" value="true" />
+    <option name="flattenPackages" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.JpaUebungApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.RezeptmanagerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Test-Zwischenstand&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/lfitz/Downloads/Schule 4/SWP Klotz/Rezeptmanager/backend/Rezeptmanager&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.3.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Composition API Component&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\lfitz\Downloads\Schule 4\SWP Klotz\Rezeptmanager\backend\Rezeptmanager\target\classes\com\Rezeptmanager\Rezeptmanager\Controller" />
+      <recent name="C:\Users\lfitz\Downloads\Schule 4\SWP Klotz\Rezeptmanager\backend\Rezeptmanager\src\main\java\com\Rezeptmanager\Rezeptmanager" />
+      <recent name="C:\Users\lfitz\Downloads\Schule 4\SWP Klotz\Rezeptmanager\backend\Rezeptmanager\src\main\java\com\Rezeptmanager" />
+      <recent name="C:\Users\lfitz\Downloads\Schule 4\SWP Klotz\JPAUebung\Rezeptmanager\backend" />
+      <recent name="C:\Users\lfitz\Downloads\Schule 4\SWP Klotz\JPAUebung\Rezeptmanager" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="RezeptmanagerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Rezeptmanager" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.Rezeptmanager.Rezeptmanager.RezeptmanagerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-17.0.10-corretto-17.0.10-f644763e9732-24fca987" />
+        <option value="jdk-22-openjdk-22-f644763e9732-8c5c9ae5" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e7f20a43-a01c-4771-a220-0da32bb0d83d" name="Changes" comment="" />
+      <created>1744022957436</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1744022957436</updated>
+      <workItem from="1744022958480" duration="2854000" />
+      <workItem from="1744043868544" duration="61000" />
+      <workItem from="1744044880549" duration="5458000" />
+      <workItem from="1744093195719" duration="2460000" />
+      <workItem from="1744305421687" duration="736000" />
+      <workItem from="1745746559913" duration="28000" />
+      <workItem from="1745835509730" duration="4487000" />
+      <workItem from="1746296769083" duration="958000" />
+      <workItem from="1746438298936" duration="1291000" />
+      <workItem from="1746439919478" duration="756000" />
+      <workItem from="1746440776730" duration="655000" />
+      <workItem from="1746443289147" duration="564000" />
+      <workItem from="1746775285365" duration="5238000" />
+      <workItem from="1746784920511" duration="894000" />
+      <workItem from="1746980955863" duration="1724000" />
+      <workItem from="1747634418030" duration="742000" />
+      <workItem from="1747647926625" duration="910000" />
+      <workItem from="1747648857613" duration="6070000" />
+      <workItem from="1747670002919" duration="888000" />
+      <workItem from="1747734719805" duration="4795000" />
+      <workItem from="1747808234093" duration="274000" />
+      <workItem from="1747808760966" duration="4988000" />
+      <workItem from="1747816146835" duration="4194000" />
+      <workItem from="1747893622354" duration="321000" />
+      <workItem from="1747894114218" duration="4261000" />
+      <workItem from="1747907794357" duration="1305000" />
+      <workItem from="1747909477470" duration="3931000" />
+      <workItem from="1747935043249" duration="402000" />
+      <workItem from="1747944069395" duration="6982000" />
+      <workItem from="1747980007872" duration="5746000" />
+      <workItem from="1748090431736" duration="8026000" />
+      <workItem from="1748103671730" duration="11344000" />
+      <workItem from="1748238835335" duration="6807000" />
+      <workItem from="1748252856198" duration="5686000" />
+      <workItem from="1748273894697" duration="979000" />
+      <workItem from="1748339064970" duration="4732000" />
+      <workItem from="1748347184144" duration="524000" />
+      <workItem from="1748635805391" duration="10078000" />
+      <workItem from="1748705777534" duration="6635000" />
+    </task>
+    <task id="LOCAL-00001" summary="Upload">
+      <option name="closed" value="true" />
+      <created>1746775814948</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1746775814948</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Upload">
+      <option name="closed" value="true" />
+      <created>1746777880107</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746777880107</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Upload">
+      <option name="closed" value="true" />
+      <created>1747653531220</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747653531220</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Notes lassen sichnoch nicht löschen und werden nicht so gut angezeigt">
+      <option name="closed" value="true" />
+      <created>1747819904210</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1747819904210</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Notes lassen sichnoch nicht löschen und werden nicht so gut angezeigt">
+      <option name="closed" value="true" />
+      <created>1747819911765</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1747819911765</updated>
+    </task>
+    <task id="LOCAL-00006" summary="ganze frontend">
+      <option name="closed" value="true" />
+      <created>1747895029042</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1747895029042</updated>
+    </task>
+    <task id="LOCAL-00007" summary="geht grundsätzlich außer design">
+      <option name="closed" value="true" />
+      <created>1747935162596</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747935162596</updated>
+    </task>
+    <task id="LOCAL-00008" summary="•&#9;Auf mySQL ändern&#10;•&#9;Tables Validieren&#10;&#10;Es soll die rezepte aus der db rausnehmen und nicht aus dem internet auslesen&#10;&#10;Fehler in Console ausbessern&#10;&#10;Website bleibt hängen">
+      <option name="closed" value="true" />
+      <created>1747954228848</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1747954228848</updated>
+    </task>
+    <task id="LOCAL-00009" summary="•&#9;Auf mySQL ändern&#10;•&#9;Tables Validieren&#10;•&#9;Rezepte aus der DB lesen&#10;•&#9;Design">
+      <option name="closed" value="true" />
+      <created>1748097799015</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1748097799015</updated>
+    </task>
+    <task id="LOCAL-00010" summary="•&#9;Auf mySQL ändern&#10;•&#9;Rezepte aus der DB lesen&#10;•&#9;Design">
+      <option name="closed" value="true" />
+      <created>1748105929240</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1748105929240</updated>
+    </task>
+    <task id="LOCAL-00011" summary="•&#9;Rezepte aus der DB lesen&#10;•&#9;Design">
+      <option name="closed" value="true" />
+      <created>1748166515504</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1748166515504</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Nur noch design">
+      <option name="closed" value="true" />
+      <created>1748340088335</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1748340088335</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Fertig">
+      <option name="closed" value="true" />
+      <created>1748710310444</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1748710310444</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Upload" />
+    <MESSAGE value="Notes lassen sichnoch nicht löschen und werden nicht so gut angezeigt" />
+    <MESSAGE value="ganze frontend" />
+    <MESSAGE value="geht grundsätzlich außer design" />
+    <MESSAGE value="•&#9;Auf mySQL ändern&#10;•&#9;Tables Validieren&#10;&#10;Es soll die rezepte aus der db rausnehmen und nicht aus dem internet auslesen&#10;&#10;Fehler in Console ausbessern&#10;&#10;Website bleibt hängen" />
+    <MESSAGE value="•&#9;Auf mySQL ändern&#10;•&#9;Tables Validieren&#10;•&#9;Rezepte aus der DB lesen&#10;•&#9;Design" />
+    <MESSAGE value="•&#9;Auf mySQL ändern&#10;•&#9;Rezepte aus der DB lesen&#10;•&#9;Design" />
+    <MESSAGE value="•&#9;Rezepte aus der DB lesen&#10;•&#9;Design" />
+    <MESSAGE value="Nur noch design" />
+    <MESSAGE value="Fertig" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fertig" />
+  </component>
+</project>
